@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <list>
 #include <cmath>
 
@@ -51,13 +52,39 @@ uint64_t Euler (uint64_t n) {
 
 int main() {
     list<uint64_t> naturShisla;
-    unsigned long res = sieveOfErastosthenes(&naturShisla, 100000);
+    //unsigned long res = sieveOfErastosthenes(&naturShisla, 100000);
 
-    uint64_t p = 6199;
-    uint64_t q = 6737;
-    uint64_t n = p * q;
-    uint64_t On = (p-1)*(q-1);
-    uint64_t resEuler = Euler(On);
+    uint64_t p = 17;
+    uint64_t q = 13;
+    uint64_t n = p * q; // 221
+    uint64_t m = (p-1)*(q-1); // 192
+    uint64_t On = m;
+    uint64_t d = 13;
+    uint64_t e = 1;
+
+    while((e * d) % m != 1) {
+        e++;
+    }
+
+  //  uint64_t resEuler = Euler(On);
+
+    string text = "I hope this shit work";
+    vector<char> resultVector;
+
+    for(int i = 0; i < text.size(); i++){
+        __int128 div = pow(text.at(i), e);
+        uint64_t temp = div % n;
+        resultVector.push_back((char)temp);
+    }
+
+    string result;
+
+    for(int i = 0; i < resultVector.size(); i++){
+        uint64_t temp = (__int128)pow(resultVector.at(i), d) % n;
+        result += (char)temp;
+    }
+
+    cout << result;
 
     return 0;
 }
