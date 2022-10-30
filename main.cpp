@@ -11,7 +11,25 @@ uint64_t findInBound(list<uint64_t>*source, uint64_t min, uint64_t max){
     if(source->empty() || (*prev(source->end()) < min)) return (uint64_t)-1;
 
     auto mMin = source->begin();
-    auto mMax = source->end();
+
+    while(*mMin < min) mMin = next(mMin);
+
+    auto mMax = mMin;
+
+    int count = 0;
+    while(source->end() != next(mMax) && *next(mMax) < max){
+        count++;
+        mMax = next(mMax);
+    }
+
+    int randVal = rand() % count;
+
+    while (randVal){
+        mMin = next(mMin);
+        randVal--;
+    }
+
+    return *mMin;
 }
 
 uint32_t sieveOfErastosthenes(list<uint64_t> *result, uint64_t maximum){
@@ -67,15 +85,30 @@ __uint128_t ipowMod(__uint128_t base, __uint128_t exp, __uint128_t mod){
 }
 
 int main() {
-    list<uint64_t> naturShisla;
-    //unsigned long res = sieveOfErastosthenes(&naturShisla, 100000);
+//    uint64_t p = 17;
+//    uint64_t q = 13;
+//    uint64_t n = p * q; // 221
+//    uint64_t m = (p-1)*(q-1); // 192
+//    uint64_t d = 13;
 
-    uint64_t p = 17;
-    uint64_t q = 13;
-    uint64_t n = p * q; // 221
-    uint64_t m = (p-1)*(q-1); // 192
-    uint64_t On = m;
-    uint64_t d = 13;
+    srand(time(nullptr));
+    list<uint64_t> naturShisla;
+    unsigned long res = sieveOfErastosthenes(&naturShisla, 100000);
+
+    uint64_t p = findInBound(&naturShisla, 10000, 30000);
+    uint64_t q = findInBound(&naturShisla, 10000, 30000);
+    uint64_t n = p * q;
+    uint64_t m = (p-1) * (q - 1);
+
+    uint64_t d = m - 1;
+
+    for(uint64_t i = 2; i <= m; i++){
+        if((m % i == 0) && (d % i == 0)){
+            d--;
+            i = 1;
+        }
+    }
+
     uint64_t e = 1;
 
     while((e * d) % m != 1) {
@@ -85,11 +118,11 @@ int main() {
   //  uint64_t resEuler = Euler(On);
 
     string text = "I hope this shit work";
-    vector<char> resultVector;
+    vector<uint64_t> resultVector;
 
     for(int i = 0; i < text.size(); i++){
-        __uint128_t div = ipowMod(text.at(i), e, n);
-        resultVector.push_back((char)div);
+        uint64_t div = ipowMod(text.at(i), e, n);
+        resultVector.push_back(div);
     }
 
     string result;
