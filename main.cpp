@@ -50,6 +50,22 @@ uint64_t Euler (uint64_t n) {
     return result;
 }
 
+__uint128_t ipowMod(__uint128_t base, __uint128_t exp, __uint128_t mod){
+    if (mod == 1) return 0;
+    __uint128_t res = 1;
+    base = base % mod;
+    while(exp > 0)
+    {
+        if(exp % 2 == 1)
+        {
+            res = (res * base) % mod;
+        }
+        exp = exp / 2;
+        base = (base * base) % mod;
+    }
+    return res;
+}
+
 int main() {
     list<uint64_t> naturShisla;
     //unsigned long res = sieveOfErastosthenes(&naturShisla, 100000);
@@ -72,15 +88,14 @@ int main() {
     vector<char> resultVector;
 
     for(int i = 0; i < text.size(); i++){
-        __int128 div = pow(text.at(i), e);
-        uint64_t temp = div % n;
-        resultVector.push_back((char)temp);
+        __uint128_t div = ipowMod(text.at(i), e, n);
+        resultVector.push_back((char)div);
     }
 
     string result;
 
     for(int i = 0; i < resultVector.size(); i++){
-        uint64_t temp = (__int128)pow(resultVector.at(i), d) % n;
+        uint64_t temp = ipowMod(resultVector.at(i), d, n);
         result += (char)temp;
     }
 
